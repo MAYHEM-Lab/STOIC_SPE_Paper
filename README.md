@@ -1,4 +1,4 @@
-# STOIC_ICCCN_Paper
+# STOIC_SPE_Paper
 
 A Consistent and Adaptable Serverless Frameworkfor Machine Learning Application on Edge Cloud
 
