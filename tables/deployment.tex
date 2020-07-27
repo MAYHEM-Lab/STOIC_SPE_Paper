@@ -1,0 +1,27 @@
+\scriptsize
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{|c|c|c|c|} 
+\hline
+& & \textbf{Optimal} & \textbf{Minimum}  \\
+\textbf{Modeling} & \textbf{Runtime} & \textbf{Window Size} & \textbf{MAE}  \\
+\hline
+AutoReg & CPU & 15 & 8.977 \\
+\hline
+AutoReg & GPU1 & 15 & 9.605 \\
+\hline
+AutoReg & GPU2 & 15 & 17.918 \\
+\Xhline{2\arrayrulewidth}
+Avg. SW & CPU & 33 & 7.714 \\
+\hline
+Avg. SW & GPU1 & 31 & 8.006 \\
+\hline
+Avg. SW & GPU2 & 91 & 16.52 \\
+\Xhline{2\arrayrulewidth}
+Med. SW & CPU & 13 & \textbf{5.96} \\
+\hline
+Med. SW & GPU1 & 31 & \textbf{5.668} \\
+\hline
+Med. SW & GPU2 & 27 & \textbf{14.48} \\
+\hline
+\end{tabular}
+}

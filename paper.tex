@@ -1,0 +1,83 @@
+\documentclass[12pt, onecolumn]{article}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{anyfontsize}
+\usepackage{makecell}
+\usepackage[linesnumbered, ruled, vlined]{algorithm2e}
+\SetAlFnt{\small}
+\SetAlCapFnt{\large}
+\SetAlCapNameFnt{\large}
+
+
+
+
+% Keywords command
+\providecommand{\keywords}[1]
+{
+  \small	
+  \textbf{\textit{Keywords---}} #1
+}
+
+\title{Edge-Adaptable Serverless Acceleration for Machine Learning IoT Applications}
+\author{Michael Zhang$^{1}$, Chandra Krintz$^{2}$ Rich Wolski$^{3}$ \\
+        \small \{lebo, ckrintz, rich\}@cs.ucsb.edu \\
+        \small Dept. of Computer Science \\
+        \small $^{1,2,3}$ University of California, Santa Barbara \\
+}
+\date{} % Comment this line to show today's date
+
+
+\hyphenation{multi-university}
+
+\newcommand{\ignore}[1]{}
+
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\label{sec:abstract}
+\input{abstract}
+\end{abstract}
+
+\keywords{serverless, IoT, scheduling, cloud functions, GPU}
+
+
+
+\section{Introduction}
+\label{sec:intro}
+\input{intro}
+
+\section{STOIC}
+\label{sec:stoic}
+\input{stoic}
+
+\section{Evaluation}
+\label{sec:results}
+\input{results}
+
+\section{Related Work}
+\label{sec:related}
+\input{related_work}
+
+
+\section{Conclusion}
+\label{sec:conc}
+\input{conclusion}
+
+% cannot include this until paper is unblinded
+%\section*{Acknowledgments}
+%This work has been supported in part by NSF (CNS-1703560, CCF-1539586,
+%ACI-1541215), ONR NEEC (N00174-16-C-0020),
+%and the AWS Cloud Credits for Research program.
+%This work was performed in part at the University of California Natural Reserve System Sedgwick Reserve DOI: 10.21973/N3C08R.
+
+
+
+
+\bibliographystyle{ama}
+\bibliography{ref_ama}
+
+\end{document}
+
+

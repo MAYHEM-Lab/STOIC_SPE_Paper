@@ -1,0 +1,24 @@
+\scriptsize
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{|c|c|c|c|} 
+\hline
+\textbf{\makecell{Predicted GPU \\Lower Latency}} & \textbf{Switch to GPU} & \textbf{\makecell{Actual GPU \\Lower Latency} } & \textbf{Case Label}\\
+\hline
+Yes & Yes & Yes & Success \\
+\hline
+Yes & Yes & No & Success \\
+\hline
+Yes & No & Yes & \textbf{Failure} \\
+\hline
+Yes & No & No & Success \\
+\hline
+No & Yes & Yes & Success\\
+\hline
+No & Yes & No & Success \\
+\hline
+No & No & Yes & \textbf{Failure} \\
+\hline
+No & No & No & Success \\
+\hline
+\end{tabular}
+}
