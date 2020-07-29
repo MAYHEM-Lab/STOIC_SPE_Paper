@@ -4,13 +4,8 @@ In each experiment, STOIC determines which resource to use for function executio
 
 \subsection{Experimental Setup}
 
-The image processing application that we use as a benchmark classifies animal images from a wildlife monitoring system.
-%called ``Where's The Bear"
-%(WTB)~\cite{ref:wtb}. ``Where's The Bear" is an end-to-end distributed data
-%acquisition and analytics system that automatically analyzes camera trap
-%images collected by cameras sited at the Sedgwick Natural
-%Reserve~\cite{ref:sedgwick} in Santa Barbara County, California. The WTB
-Our deployment includes an edge cloud located near the cameras where it acquires the image data. The edge cloud is connected via a slow (microwave) link to a private cloud located at a research facility located approximately 50 miles from the site. In this work, we explore using the Nautilus distributed GPU cloud~\cite{ref:nautilus} as the public cloud, in conjunction with the edge cloud to optimize image classification on a convolutional neural network (CNN)~\cite{ref:cnn} implemented by Tensorflow and Scikit-learn~\cite{ref:scikit}. 
+The image processing application that we use as a benchmark classifies animal images from a wildlife monitoring system called ``Where's The Bear"
+(WTB)~\cite{ref:wtb}. ``Where's The Bear" is an end-to-end distributed data acquisition and analytics system that automatically analyzes camera trap images collected by cameras sited at the Sedgwick Natural Reserve~\cite{ref:sedgwick} in Santa Barbara County, California. Our deployment includes an edge cloud located near the cameras where it acquires the image data. The edge cloud is connected via a slow (microwave) link to a private cloud located at a research facility located approximately 50 miles from the site. In this work, we explore using the Nautilus distributed GPU cloud~\cite{ref:nautilus} as the public cloud, in conjunction with the edge cloud to optimize image classification on a convolutional neural network (CNN)~\cite{ref:cnn} implemented by Tensorflow and Scikit-learn~\cite{ref:scikit}. 
 
 In total, there are five classes that we consider: Bird, Fox, Rodent, Human, and Empty, by which we label images for training tasks and evaluate model by inference. Since class size is unbalanced due to the frequency of animal occurrences, we up-sample minority classes (e.g. fox) using the Keras ImageDataGenerator~\cite{ref:keras}. Doing so ensures that the classification model is not biased. We resize every image in the image dataset to $1920 \times 1080$, and for each class, the dataset contains 251 images used to train the CNN model. Once model training is complete, the application stores this model in hdf5 format in object storage at both edge cloud and Nautilus.
 
@@ -47,7 +42,7 @@ To drive this experiment, we use the workload generator described in Section~\re
 
 We first evaluate STOIC selector mode for a 24-hour period consisting of 162 image batches, the sizes of which are drawn randomly from the workload generator. Each batch is executed on the edge cloud, on the Nautilus CPU, on one Nautilus GPU, and two Nautilus GPUs. Over the test period, the STOIC Selector chooses the fastest (lowest total response time) from among these four options $149$ times out of the $162$ runs or $92\%$ of the time. That is, STOIC correctly identifies the fastest option with a success rate of $92\%$.
 
-Further, the optimal selection (i.e. an oracle selection that is $100\%$ correct) would have resulted in an aggregate total latency of $10022$ seconds, whereas the worst case has aggregate latency $35940$ seconds compared to a STOIC aggregate latency of $10770$ seconds.  Thus STOIC achieves an aggregate latency that is $7.4\%$ slower than optimal, but $70\%$ ($3.33$x) faster than the worst case.
+Further, we define MIN-LAT (minimum latency scheduler), which is an oracle scheduler that is $100\%$ correct on selections of runtime. Such scheduler would have resulted in an aggregate total latency of $10022$ seconds, whereas the worst case has aggregate latency $35940$ seconds compared to a STOIC aggregate latency of $10770$ seconds.  Thus STOIC achieves an aggregate latency that is $7.4\%$ slower than MIN-LAT, but $70\%$ ($3.33$x) faster than the worst case.
 
 %Table~\ref{tab:selector} summarizes these results. In the
 %table, we report the success rate, the percentage of optimal, and the
@@ -149,7 +144,7 @@ Nautilus savings (positive values) and loss (negative values) for STOIC Duplicat
 \label{tab:savings}
 \end{table}
 
-Recall that the total optimal time (the time associated with the minimum execution of each batch) is $10022$ seconds. The positive values in the table indicate the total time returned to Nautilus (that would have otherwise been used) by selecting the edge for execution.  Note that these savings correspond to the results shown in Table~\ref{tab:comparison} for the Duplicator. That is, they are the savings that STOIC was able to achieve while implementing a schedule within either $1\%$ or $2\%$ of optimal.  The loss (negative values) shows the amount of Nautilus time that was used unnecessarily. That is, when STOIC Duplicator chose conditionally to use the GPU or GPUs and the edge finishes first, the elapsed time on Nautilus is unnecessarily ``lost.'' Clearly from the table, Duplicator saves more Nautilus time than it loses. Thus, we infer that STOIC in duplicator mode optimizes the time to solution (Table~\ref{tab:comparison}) while utilizing the expensive Nautilus resource efficiently (Table~\ref{tab:savings}) by using the edge cloud node speculatively.  
+Recall that the total MIN-LAT time (the time associated with the minimum execution of each batch) is $10022$ seconds. The positive values in the table indicate the total time returned to Nautilus (that would have otherwise been used) by selecting the edge for execution.  Note that these savings correspond to the results shown in Table~\ref{tab:comparison} for the Duplicator. That is, they are the savings that STOIC was able to achieve while implementing a schedule within either $1\%$ or $2\%$ of MIN-LAT.  The loss (negative values) shows the amount of Nautilus time that was used unnecessarily. That is, when STOIC Duplicator chose conditionally to use the GPU or GPUs and the edge finishes first, the elapsed time on Nautilus is unnecessarily ``lost.'' Clearly from the table, Duplicator saves more Nautilus time than it loses. Thus, we infer that STOIC in duplicator mode optimizes the time to solution (Table~\ref{tab:comparison}) while utilizing the expensive Nautilus resource efficiently (Table~\ref{tab:savings}) by using the edge cloud node speculatively.  
 
 
 % (47.43\% to the
