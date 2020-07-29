@@ -42,7 +42,7 @@ To drive this experiment, we use the workload generator described in Section~\re
 
 We first evaluate STOIC selector mode for a 24-hour period consisting of 162 image batches, the sizes of which are drawn randomly from the workload generator. Each batch is executed on the edge cloud, on the Nautilus CPU, on one Nautilus GPU, and two Nautilus GPUs. Over the test period, the STOIC Selector chooses the fastest (lowest total response time) from among these four options $149$ times out of the $162$ runs or $92\%$ of the time. That is, STOIC correctly identifies the fastest option with a success rate of $92\%$.
 
-Further, we define MIN-LAT (minimum latency scheduler), which is an oracle scheduler that is $100\%$ correct on selections of runtime. Such scheduler would have resulted in an aggregate total latency of $10022$ seconds, whereas the worst case has aggregate latency $35940$ seconds compared to a STOIC aggregate latency of $10770$ seconds.  Thus STOIC achieves an aggregate latency that is $7.4\%$ slower than MIN-LAT, but $70\%$ ($3.33$x) faster than the worst case.
+Further, we define MIN-LAT (minimum latency scheduler), which is an oracle scheduler that is $100\%$ correct on selections of runtime. Such scheduler would have resulted in an aggregate total latency of $10022$ seconds, whereas the worst case, in which the scheduler selects the highest-latency runtime for every run, has an aggregate latency of $35940$ seconds, compared to a STOIC aggregate latency of $10770$ seconds.  Thus STOIC achieves an aggregate latency that is $7.4\%$ slower than MIN-LAT, but $70\%$ ($3.33$x) faster than the worst case.
 
 %Table~\ref{tab:selector} summarizes these results. In the
 %table, we report the success rate, the percentage of optimal, and the
