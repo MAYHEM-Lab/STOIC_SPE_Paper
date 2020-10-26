@@ -17,7 +17,7 @@ Our system design is motivated by a need to classify wildlife images in a locati
 The STOIC edge controller is a server that runs in an
 out-building at the reserve. It communicates wirelessly with the sensors and triggers analysis and computation upon their arrival. The edge controller is connected to a research facility (which has full Internet connectivity) 
 %remove for blind: the UCSB campus
-via a microwave link. When a camera trap detects motion, it takes photos and persists the images in flash storage buffer, where human experts would label images for training tasks. Periodically, sensors transfer saved photos to the edge controller. During a transfer cycle, the edge controller compresses and packages all images generated and transfers the package to the public cloud, if/when necessary. STOIC runs on the edge controller and its execution is triggered by the arrival of image batches. 
+via a microwave link. When a camera trap detects motion, it takes photos and persists the images in flash storage buffer, where human experts would label images for training tasks. Periodically, sensors transfer saved photos to the edge controller. During a transfer cycle, the edge controller compresses and packages all images generated and transfers the package to the public cloud, if/when necessary. STOIC runs on the edge controller and its executions are triggered by the arrival of image batches. 
 
 As an intermediate computational tier between the sensors and the public cloud, the edge controller can be placed anywhere, preferably near the edge devices, to lower the response latency for the data processing and analytics applications. It consists of three major components: 
 \begin{itemize}
@@ -139,6 +139,10 @@ As part of our investigations into this approach, we have found that this approa
     \includegraphics[scale=0.20]{figures/timeline.png}
     \caption{The comparison of predicted and actual total latency on 50 GPU1 benchmark executions with 150-image batch size. The x-axis is the epoch time and the y-axis is the total latency. \label{fig:timeline}}
 \end{figure*}
+ 
+ \subsubsection{Adaptability}
+ 
+To verify that STOIC's estimation of execution time captures the actual latency of the public cloud, we execute the application 50 times with 150-image batch using the GPU1 runtime. Depicted in Figure~\ref{fig:timeline}, we observe that actual total latency varies significantly and predicted total latency has a non-negligible difference from the actual total latency at the beginning of the experiment. However, over time, as STOIC learns the various latencies of the system, the difference is significantly reduced. In Table~\ref{tab:timeline}, we report the percentage mean absolute error (PMAE), which we compute as the MAE divided by mean latency. The decrease in all three PMAE values in the second half of the execution trace also show STOIC's adaptability.
 
 \begin{table}
 \centering
@@ -148,10 +152,6 @@ As part of our investigations into this approach, we have found that this approa
 \caption{The percentage mean absolute error (PMAE) of deployment, processing, and total latency. PMAE is a latency-normalized metric and calculated as MAE divided by mean latency, which indicates the residual in a measured period. The decline of three latency metrics in the second half demonstrates the adaptability of STOIC.
 \label{tab:timeline}}
 \end{table}
- 
- \subsubsection{Adaptability}
- 
-To verify that STOIC's estimation of execution time captures the actual latency of the public cloud, we execute the application 50 times with 150-image batch using the GPU1 runtime. Depicted in Figure~\ref{fig:timeline}, we observe that actual total latency varies significantly and predicted total latency has a non-negligible difference from the actual total latency at the beginning of the experiment. However, over time, as STOIC learns the various latencies of the system, the difference is significantly reduced. In Table~\ref{tab:timeline}, we report the percentage mean absolute error (PMAE), which we compute as the MAE divided by mean latency. The decrease in all three PMAE values in the second half of the execution trace also show STOIC's adaptability.
 
 \begin{figure*}
 \centering
@@ -189,7 +189,7 @@ To drive our empirical evaluation in faster-than-real time,  we construct a work
 
 After excluding camera maintenance periods (gaps), we  extract 1136 effective days (27264 hours) of data. The maximum size of hourly image batch is 2450, whereas the minimum size is unsurprisingly zero, which constitutes 18139 hours out of 27264 hours (66.53\%). On average, an hourly image batch size contains 25 images. The left graph in Figure~\ref{fig:hour_act_and_cdf} illustrates the wildlife  hourly activity level based on the image batch size. We infer from the curve that 1 PM and 8 PM are two peak hours of animal activity.
 
-Specifically, we construct a conditional empirical cumulative distribution function~(ECDF) based on the probability definition of  $Pr(x < K | x > 0)$, where x is the image batch size and K is the cutoff value. This conditional ECDF effectively represents the trajectory of the animal activity level and makes the evaluation empirical. The right graph in Figure~\ref{fig:hour_act_and_cdf} plots the conditional ECDF. 
+Specifically, we construct a conditional empirical cumulative distribution function (ECDF) based on the probability definition of  $Pr(x < K | x > 0)$, where x is the image batch size and K is the cutoff value. This conditional ECDF effectively represents the trajectory of the animal activity level and makes the evaluation empirical. The right graph in Figure~\ref{fig:hour_act_and_cdf} plots the conditional ECDF. 
 The x-axis is the image batch size ranging from zero to 2450, whereas the y-axis is the cumulative probability. The STOIC workload generator draws image batch sizes by
 randomly sampling this ECDF.
 %The sampling procedure is as follows.  During the execution of STOIC, 
@@ -217,7 +217,7 @@ As mentioned previously, the STOIC serverless architecture leverages kubeless~\c
 %function requests in the same manner as Nautilus. To further reduce the
 %deployment time on the minikube cluster, 
 
-To leverage the computational power of our CPU systems, we compile Tensorflow with AVX2, SSE4.2 \cite{ref:avx} and FMA~\cite{ref:fma} instruction set support. We use this optimized version of Tensorflow on both the edge and public clouds.
+To leverage the computational power of our CPU systems, we compile Tensorflow with AVX2, SSE4.2 \cite{ref:avx}, and FMA~\cite{ref:fma} instruction set support. We use this optimized version of Tensorflow on both the edge and public clouds.
 %From our previous test result
 %in~\cite{ref:stoic}, we observe significant speed-up from the customized
 %library on CPU runtime. Therefore, we use this Tensorflow configuration on
@@ -253,7 +253,7 @@ STOIC also attempts to reduce startup time (i.e. cold starts) at both the edge a
 
 We observe from Table~\ref{tab:timeline} that there are significant variations in the deployment time of the runtimes on the shared public cloud. To enable STOIC to adapt to this variability, we consider a second workflow called \textbf{duplicator} mode. Using this mode, when the scheduler selects a public cloud runtime (i.e. CPU, GPU1, GPU2), the requester \textit{also} deploys the job on the edge cloud. It then terminates edge cloud execution if the remaining time at edge cloud is longer than the expected processing time ($T_p$) at the GPU runtime once deployment completes. This ``lagging decision'' mechanism reduces the variability of deployment time in the prediction. As a result, STOIC must only consider processing time, which is more accurately predicted, to deploy tasks. Note that duplicator mode is less energy-efficient because it runs tasks regardless of latency prediction and may waste cloud resources by killing the function in the middle. However, if such waste can be tolerated, significant prediction accuracy and latency reduction are possible.
 
-In addition, the inquisitor running in background deploys the public cloud runtimes periodically and stores the deployment time duration in the database for use in the prediction. We set a timeout (i.e. 10 minutes) to terminate this process for any unresponsive deployment. That is, the inquisitor marks the runtime unavailable (from the point of view of the requester) when the deployment hits the set timeout. The inquisitor continues to attempt deployment of this runtime periodically and makes it available to the requester once a deployment attempt is successful.
+In addition, the inquisitor running in the background deploys the public cloud runtimes periodically and stores the deployment time duration in the database for use in the prediction. We set a timeout (i.e. 10 minutes) to terminate this process for any unresponsive deployment. That is, the inquisitor marks the runtime unavailable (from the point of view of the requester) when the deployment hits the set timeout. The inquisitor continues to attempt deployment of this runtime periodically and makes it available to the requester once a deployment attempt is successful.
 
 To bootstrap the system, STOIC executes two representative tasks for an application for each runtime in both the edge and public cloud. It uses these data points as a basis for its processing time estimation by linear regression. STOIC performs this bootstrapping each time a new version of the application is uploaded by the developer.
 

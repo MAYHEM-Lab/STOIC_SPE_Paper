@@ -61,7 +61,7 @@ Further, we define MIN-LAT (minimum latency scheduler), which is an oracle sched
 %\label{tab:selector}
 %\end{table}
 
-We further analyze the data points where STOIC made erroneous selections and found two sources of error. First, the most error occurs around two batch sizes where the total response times of runtime have approximately the same latency. To be specific, the edge and GPU runtimes cross over at 35 image batch size and 90 image batch size for the GPU1 and GPU2 runtimes. At these cross-points, the close predictions of latency lead to incorrect selection.~\cite{ref:stoic2020} Second, the deployment times for GPU runtime are volatile and error-prone to prediction. As a representative instance, Figure~\ref{fig:breakdown} demonstrates the distribution of processing time ($T_p$), transfer time ($T_t$) and deployment time ($T_d$) of GPU1 runtime. We observe geometric distribution from the histogram of processing time and transfer time, whereas deployment time varies irregularly with many outliers. These two phenomenons lead to mistaken selections in the experiment.
+We further analyze the data points where STOIC made erroneous selections and found two sources of error. First, the most error occurs around two batch sizes where the total response times of runtime have approximately the same latency. To be specific, the edge and GPU runtimes cross over at 35 image batch size and 90 image batch size for the GPU1 and GPU2 runtimes. At these cross-points, the close predictions of latency lead to incorrect selection.~\cite{ref:stoic2020} Second, the deployment times for GPU runtime are volatile and error-prone to prediction. As a representative instance, Figure~\ref{fig:breakdown} demonstrates the distribution of processing time ($T_p$), transfer time ($T_t$), and deployment time ($T_d$) of GPU1 runtime. We observe geometric distribution from the histogram of processing time and transfer time, whereas deployment time varies irregularly with many outliers. These two phenomenons lead to mistaken selections in the experiment.
 
 \subsection{Duplicator Evaluation}
 
@@ -101,7 +101,7 @@ Thus, choosing incorrectly (i.e. a failure) occurs when the actual completion ti
 \input{tables/duplicator}
 }
 \caption{
-The comparison of Selector and Duplicators. The table demonstrates that the duplicator(GPU1) achieves highest success rate in predicting optimal runtime, whereas duplicator(GPU2) obtains the lowest total latency.}
+The comparison of Selector and Duplicators. The table demonstrates that the duplicator(GPU1) achieves the highest success rate in predicting optimal runtime, whereas duplicator(GPU2) obtains the lowest total latency.}
 \label{tab:comparison}
 \end{table*}
 
