@@ -1,6 +1,66 @@
-We explored an early design and scheduler for STOIC in~\cite{ref:stoic2020}.  This paper extends this workshop paper with a new scheduling system and consideration of both individual and concurrent edge-cloud placements. Many great prior works~\cite{ref:lowlatency, ref:bandwidth, ref:MAUI}, which have explored low-latency geo-distributed data analytics and mobile-cloud offloading, inspires the architecture design of STOIC. One relevant approach is federated learning~\cite{ref:federated}, by which a comprehensive model is trained across heterogeneous edge devices or servers without exchanging local data samples. Federated learning aims to address the security and networking concerns by keeping the datasets local at devices, whereas STOIC intelligently offloads jobs across multiple tiers of cloud infrastructure to minimize the latency by taking full advantage of computing resources. Furthermore, this work focuses on IoT infrastructure leveraging serverless computing and GPUs on ecological applications. Hence, we consider recent advances in machine learning infrastructure, serverless computing, GPU accelerators, and Kubernetes orchestration service. \cite{ref:serverlessstep} and \cite{ref:berkeleyserverless} conduct a comprehensive survey on serverless computing including challenges and research opportunities. We share the same viewpoint that the use of the serverless execution model will grow for online training and inference applications. \cite{ref:deepserving} provides a prototype for a deep learning model serving in a serverless platform. \cite{ref:accelerated} provides another use case for accelerating serverless functions by GPU virtualization in data centers. Unique in our work, STOIC extends an existing serverless framework to support GPU acceleration and distributed function placement across the edge and public clouds. \cite{ref:evaluation} evaluates several serverless frameworks based on Kubernetes. We also employ Kubernetes for container orchestration, which is lightweight, flexible, and developer-friendly.  We concur that Kubernetes is a promising deployment infrastructure for serverless computing.  
+We have explored an initial design and scheduler for STOIC
+in~\cite{ref:stoic2020}.  The work herein extends this early work with a new
+scheduling system and consideration of both individual and concurrent edge-cloud
+placements. 
 
-The second relevant domain of related work is edge-to-cloud infrastructure enabling IoT device applications. \cite{ref:face} compares the processing time of face recognition between the edge device and IoT, namely smartphones. It concludes that edge devices perform comparably faster and scales better as the number of images increases. We agree with this conclusion, and as such, design STOIC to offload image processing workloads to both edge clouds and public clouds. \cite{ref:DDNN} proposes a distributed deep neural network that allows fast and localized inference at the edge device using truncated layers of a neural network. \cite{ref:cooperative} defines edge cloud offloading as a Markov decision process (MDP) whose objective is to minimize the average processing time per job. Based on this setting, it provides a novel approximate solution to MDP with a one-step policy iteration. Similar to this approach, \cite{ref:QoS-aware} proposes a Global Cluster Manager for orchestrating network-intensive programs within Software-Defined Data Centers (SDDCs) targeting high Quality of Service (QoS) and, further, \cite{ref:FQoS} classifies available cloud deployment options by a stochastic Markov model, namely Formal QoS Assurances Method (FoQoSAM), to optimize the automated offloading process. Due to its practical utility, such a method can guarantee all hard and additional soft QoS requirements are satisfied in cloud infrastructure. \cite{ref:trust} proposes a fog computing platform (DECENTER) and its trust management architecture based on Smart Contracts. Related to this work, \cite{ref:multichain} develops an architecture (HCL-BaFog) by the blockchain functionality to share sensor data. Table~\ref{tab:related-work} summarizes the properties of DECENTER, HCL-BaFog, and STOIC. These works are complementary to STOIC and we are considering how to incorporate them into the system as part of future work.
+A significant body of work~\cite{ref:lowlatency, ref:bandwidth, ref:MAUI} has
+explored low-latency geo-distributed data analytics and mobile-cloud offloading
+-- which we take as inspiration for the STOIC design. One relevant approach is
+federated learning~\cite{ref:federated}, by which a comprehensive model is
+trained across heterogeneous edge devices or servers without exchanging local
+data samples. Federated learning aims to address the security and networking
+concerns by keeping the datasets local at devices, whereas STOIC intelligently
+offloads jobs across multiple tiers of cloud infrastructure to further reduce
+latency. 
+
+In addition, STOIC targets IoT systems and leverages serverless
+computing and GPUs. 
+As such, other related work includes recent advances in machine learning
+infrastructure, serverless computing, GPU accelerators, and container-based
+orchestration services. \cite{ref:serverlessstep} and
+\cite{ref:berkeleyserverless} conduct a comprehensive survey on serverless
+computing including challenges and research opportunities. We share the same
+viewpoint that the use of the serverless execution model will grow for online
+training and inference applications. \cite{ref:deepserving} provides a prototype
+for a deep learning model serving in a serverless platform.
+\cite{ref:accelerated} provides another use case for accelerating serverless
+functions by GPU virtualization in data centers. Unique in our work, STOIC
+extends an existing serverless framework to support GPU acceleration and
+distributed function placement across the edge and public clouds.
+\cite{ref:evaluation} evaluates several serverless frameworks that use
+Kubernetes to manage and orchestrate use of Linux containers. STOIC also
+integrates Kubernetes for container orchestration, which is lightweight,
+flexible, and developer-friendly.  We concur that Kubernetes is a promising
+deployment infrastructure for serverless computing.  
+
+Another relevant domain of related work is edge-to-cloud 
+infrastructure enabling IoT device applications. 
+\cite{ref:face} compares the processing time of face recognition 
+between the edge device and smartphones.  It concludes that edge
+devices perform comparably faster and scales better as the number of images
+increases. We agree with this conclusion, and as such, we design STOIC to offload
+image processing workloads to both edge clouds and public clouds.
+\cite{ref:DDNN} proposes a distributed deep neural network that allows fast and
+localized inference at the edge device using truncated layers of a neural
+network. \cite{ref:cooperative} defines edge cloud offloading as a Markov
+decision process (MDP) whose objective is to minimize the average processing
+time per job. Based on this setting, it provides an approximate solution to
+MDP with a one-step policy iteration. Similar to this approach,
+\cite{ref:QoS-aware} proposes a Global Cluster Manager for orchestrating
+network-intensive programs within Software-Defined Data Centers (SDDCs)
+targeting high Quality of Service (QoS) and, further, \cite{ref:FQoS} classifies
+available cloud deployment options by a stochastic Markov model, namely Formal
+QoS Assurances Method (FoQoSAM), to optimize the automated offloading process.
+Due to its practical utility, such a method can guarantee that 
+QoS requirements are satisfied.
+
+\cite{ref:trust} proposes a fog computing platform (DECENTER) and a trust
+management architecture based on Smart Contracts. Related to this work,
+\cite{ref:multichain} develops an architecture (HCL-BaFog) by the blockchain
+functionality to share sensor data. Table~\ref{tab:related-work} summarizes the
+properties of DECENTER, HCL-BaFog, and STOIC. These works are complementary to
+STOIC and we are considering how to incorporate them into the system as part of
+future work.
 
 \begin{table}
 \centering
@@ -10,4 +70,14 @@ The second relevant domain of related work is edge-to-cloud infrastructure enabl
 \label{tab:related-work}}
 \end{table}
 
-Also complimentary to STOIC, are tracing, testing, repair, and profiling tools (which STOIC can leverage) for serverless systems. Multiple works track causal dependencies across distributed serverless deployments for use in optimization, placement, and data repair~\cite{ref:repairdata,deptracing19,gammaray17,aws-xray}. FaaSProfiler~\cite{ref:profile} provides a tool for testing and profiling STOIC as a FaaS platform. \cite{ref:security} proposes a security solution that applies reinforcement learning (RL) to provide secure offloading to the edge nodes to prevent jamming attacks. These related systems can be combined with STOIC to provide a robust serverless ecosystem for distributed IoT devices.
+Also complimentary to STOIC, are tracing, testing, repair, and profiling tools
+(which STOIC can leverage) for serverless systems. Multiple works track causal
+dependencies across distributed serverless deployments for use in optimization,
+placement, and data
+repair~\cite{ref:repairdata,deptracing19,gammaray17,aws-xray}.
+FaaSProfiler~\cite{ref:profile} integrates testing and profiling 
+within a FaaS platform. \cite{ref:security} proposes a security solution that
+applies reinforcement learning (RL) to provide secure offloading to the edge
+nodes to prevent jamming attacks. These related systems can be combined with
+STOIC to provide a robust serverless ecosystem for distributed IoT devices.
+
