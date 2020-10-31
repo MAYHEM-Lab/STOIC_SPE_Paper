@@ -1,11 +1,6 @@
-We have explored an initial design and scheduler for STOIC
-in~\cite{ref:stoic2020}.  The work herein extends this early work with a new
-scheduling system and consideration of both individual and concurrent edge-cloud
-placements. 
+We have explored an initial design and scheduler for STOIC in~\cite{ref:stoic2020}.  The work herein extends this early work with a new scheduling system and consideration of both individual and concurrent edge-cloud placements. 
 
-A significant body of work~\cite{ref:lowlatency, ref:bandwidth, ref:MAUI} has
-explored low-latency geo-distributed data analytics and mobile-cloud offloading
--- which we take as inspiration for the STOIC design. One relevant approach is
+A significant body of work~\cite{ref:lowlatency, ref:bandwidth, ref:MAUI} has explored low-latency geo-distributed data analytics and mobile-cloud offloading -- which we take as inspiration for the STOIC design. One relevant approach is
 federated learning~\cite{ref:federated}, by which a comprehensive model is
 trained across heterogeneous edge devices or servers without exchanging local
 data samples. Federated learning aims to address the security and networking
@@ -13,25 +8,7 @@ concerns by keeping the datasets local at devices, whereas STOIC intelligently
 offloads jobs across multiple tiers of cloud infrastructure to further reduce
 latency. 
 
-In addition, STOIC targets IoT systems and leverages serverless
-computing and GPUs. 
-As such, other related work includes recent advances in machine learning
-infrastructure, serverless computing, GPU accelerators, and container-based
-orchestration services. \cite{ref:serverlessstep} and
-\cite{ref:berkeleyserverless} conduct a comprehensive survey on serverless
-computing including challenges and research opportunities. We share the same
-viewpoint that the use of the serverless execution model will grow for online
-training and inference applications. \cite{ref:deepserving} provides a prototype
-for a deep learning model serving in a serverless platform.
-\cite{ref:accelerated} provides another use case for accelerating serverless
-functions by GPU virtualization in data centers. Unique in our work, STOIC
-extends an existing serverless framework to support GPU acceleration and
-distributed function placement across the edge and public clouds.
-\cite{ref:evaluation} evaluates several serverless frameworks that use
-Kubernetes to manage and orchestrate use of Linux containers. STOIC also
-integrates Kubernetes for container orchestration, which is lightweight,
-flexible, and developer-friendly.  We concur that Kubernetes is a promising
-deployment infrastructure for serverless computing.  
+In addition, STOIC targets IoT systems and leverages serverless computing and GPUs. As such, other related work includes recent advances in machine learning infrastructure, serverless computing, GPU accelerators, and container-based orchestration services. \cite{ref:serverlessstep} and \cite{ref:berkeleyserverless} conduct a comprehensive survey on serverless computing including challenges and research opportunities. We share the same viewpoint that the use of the serverless execution model will grow for online training and inference applications. \cite{ref:deepserving} provides a prototype for a deep learning model serving in a serverless platform. \cite{ref:accelerated} provides another use case for accelerating serverless functions by GPU virtualization in data centers. Unique in our work, STOIC extends an existing serverless framework to support GPU acceleration and distributed function placement across the edge and public clouds. \cite{ref:evaluation} evaluates several serverless frameworks that use Kubernetes to manage and orchestrate use of Linux containers. STOIC also integrates Kubernetes for container orchestration, which is lightweight, flexible, and developer-friendly. We concur that Kubernetes is a promising deployment infrastructure for serverless computing.  
 
 Another relevant domain of related work is edge-to-cloud 
 infrastructure enabling IoT device applications. 
@@ -51,10 +28,7 @@ network-intensive programs within Software-Defined Data Centers (SDDCs)
 targeting high Quality of Service (QoS) and, further, \cite{ref:FQoS} classifies
 available cloud deployment options by a stochastic Markov model, namely Formal
 QoS Assurances Method (FoQoSAM), to optimize the automated offloading process.
-Due to its practical utility, such a method can guarantee that 
-QoS requirements are satisfied.
-
-\cite{ref:trust} proposes a fog computing platform (DECENTER) and a trust
+Due to its practical utility, such a method can guarantee that QoS requirements are satisfied. \cite{ref:trust} proposes a fog computing platform (DECENTER) and a trust
 management architecture based on Smart Contracts. Related to this work,
 \cite{ref:multichain} develops an architecture (HCL-BaFog) by the blockchain
 functionality to share sensor data. Table~\ref{tab:related-work} summarizes the
